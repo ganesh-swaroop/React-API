@@ -11,8 +11,6 @@ using System.Linq.Dynamic;
 
 namespace CustomerAPI.DAL
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class CustomerDefDal 
     {
         private readonly CustomerDbContext _db;
@@ -69,19 +67,6 @@ namespace CustomerAPI.DAL
             }
         }
 
-        public CustomerDef Select(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                throw new Exception("ClientID can not be null");
-            }
-            var customerDef = _db.CustomerDef.Find(id);
-            if (customerDef == null)
-            {
-                throw new Exception("ClientID is not valid");
-            }
-            return customerDef;
-        }
 
         public async Task Delete(string id)
         {
@@ -152,7 +137,6 @@ namespace CustomerAPI.DAL
             dbDto = AddFilter(dbDto, dtoSO);
             return  await dbDto.CountAsync();
         }
-
 
         private bool CustomerDefExists(string id)
         {
