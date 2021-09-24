@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using CustomerAPI.Models;
+using CustomerAPI.DAL;
 using CustomerAPI.Controllers;
 using System.Threading.Tasks;
 using System.Linq;
@@ -142,7 +143,7 @@ namespace CustomerAPItest
         [TestMethod]
         public async Task Select()
         {
-            var custobj = new CustomerDefController();
+            var custobj = new CustomerDefDal();
             var result = await custobj.GetRecord("2");
         }
         [TestMethod]

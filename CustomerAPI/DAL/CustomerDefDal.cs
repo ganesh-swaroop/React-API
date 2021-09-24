@@ -6,25 +6,33 @@ using Microsoft.AspNetCore.Mvc;
 using CustomerAPI.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 
 
 namespace CustomerAPI.DAL
 {
+    // public partial class CustomerDbContext : DbContext
+    // {
+    //     public virtual DbSet<CustomerDef> CustomerDef {get;set;}
+
+    // }
     public class CustomerDefDal 
     {
         private readonly CustomerDbContext _db;
+        public CustomerDefDal(){
+            _db = new CustomerDbContext();
+        }
         public CustomerDefDal(CustomerDbContext db){
             _db = db;
         }
         public async Task Insert(CustomerDef customerDef){
             if (customerDef == null)
             {
-                throw new InvalidOperationException("ClientDef parameter cannot be null");
+                throw new InvalidOperationException("CustomerDef parameter cannot be null");
             }
             if (customerDef.CustomerID == null)
             {
-                throw new Exception("ClientID cannot be null");
+                throw new Exception("CustomerID cannot be null");
             }
             await _db.CustomerDef.AddAsync(customerDef);
             try
@@ -35,11 +43,11 @@ namespace CustomerAPI.DAL
             {
                 if (CustomerDefExists(customerDef.CustomerID))
                 {
-                    throw new Exception("ClientID already exists");
+                    throw new Exception("CustomerID already exists");
                 }
                 else
                 {
-                    throw new Exception("Client was not added");
+                    throw new Exception("Customer was not added");
                 }
             }
         }
@@ -47,7 +55,7 @@ namespace CustomerAPI.DAL
         public async Task Update(CustomerDef customerDef)
         {
             if (customerDef == null) {
-                throw new InvalidOperationException("ClientDef parameter cannot be null");
+                throw new InvalidOperationException("CustomerDef parameter cannot be null");
             }
             _db.CustomerDef.Update(customerDef);
             try
@@ -58,11 +66,11 @@ namespace CustomerAPI.DAL
             {
                 if (!CustomerDefExists(customerDef.CustomerID))
                 {
-                    throw new Exception("ClientID does not exists");
+                    throw new Exception("CustomerID does not exists");
                 }
                 else
                 {
-                    throw new Exception("Client was not updated");
+                    throw new Exception("Customer was not updated");
                 }
             }
         }
@@ -72,13 +80,13 @@ namespace CustomerAPI.DAL
         {
             if (id == null)
             {
-                throw new Exception("ClientID can not be null");
+                throw new Exception("CustomerID can not be null");
             }
             var customerDef =  await _db.CustomerDef.FindAsync(id);
             Console.WriteLine(customerDef);
             if (customerDef == null)
             {
-                throw new Exception("ClientID is not valid");
+                throw new Exception("CustomerID is not valid");
             }
 
             _db.CustomerDef.Remove(customerDef);
@@ -89,7 +97,7 @@ namespace CustomerAPI.DAL
             }
             catch (DbUpdateException)
             {
-                throw new Exception("Client was not Deleted");
+                throw new Exception("Customer was not Deleted");
             }
         }
 
@@ -97,7 +105,7 @@ namespace CustomerAPI.DAL
         {
             if (dtoSO == null)
             {
-                throw new Exception("ClientDefSO can not be null");
+                throw new Exception("CustomerDefSO can not be null");
             }
             var dbDto = from c in _db.CustomerDef select c;
             dbDto = AddFilter(dbDto, dtoSO);
@@ -109,7 +117,7 @@ namespace CustomerAPI.DAL
         {
              if (dtoSO == null)
             {
-                throw new Exception("ClientDefSO can not be null");
+                throw new Exception("CustomerDefSO can not be null");
             }
             if (dtoSO.StartIndex < 0)
             {
@@ -131,7 +139,7 @@ namespace CustomerAPI.DAL
         {
             if (dtoSO == null)
             {
-                throw new Exception("ClientDefSO can not be null");
+                throw new Exception("CustomerDefSO can not be null");
             }
             var dbDto = from c in _db.CustomerDef select c;
             dbDto = AddFilter(dbDto, dtoSO);
@@ -267,15 +275,15 @@ namespace CustomerAPI.DAL
         {
             if (string.IsNullOrEmpty(id))
             {
-                throw new Exception("ClientID can not be null or empty");
+                throw new Exception("CustomerID can not be null or empty");
             }
-            var clientDef =  await _db.CustomerDef.FindAsync(id);
+            var CustomerDef = await _db.CustomerDef.FindAsync(id);
 
-            if (clientDef == null)
+            if (CustomerDef == null)
             {
-                throw new Exception("ClientID is not valid");
+                throw new Exception("CustomerID is not valid");
             }
-            return clientDef;
+            return CustomerDef;
         }
     
         public Dictionary<string, string> GetKeyValues(string keyCol, string valueCol, CustomerDefSO dtoSO)

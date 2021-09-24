@@ -18,38 +18,42 @@ namespace CustomerAPI.Controllers
     {
         private readonly CustomerDefDal _dal;
         private readonly CustomerDbContext _context;
-
-        public CustomerDefController(CustomerDbContext context){
+        public CustomerDefController(){
+            _context = new CustomerDbContext();
             _dal = new CustomerDefDal(_context);
-            _context = context;
-        }
 
-        [HttpPost(nameof(SearchRecord))]
-        [Route("SearchRecord")]
+        }
+        // public CustomerDefController(CustomerDbContext context){
+        //     _context = context;
+        //     _dal = new CustomerDefDal(_context);     
+        // }
+
+        [HttpGet(nameof(SearchRecord))]
+        //[Route("SearchRecord")]
         public async Task<List<CustomerDef>> SearchRecord(CustomerDefSO defSO)
         {
             var dbDto =  _dal.SearchRecord(defSO);
             return  await dbDto.ToListAsync();
         }
 
-        [HttpPost(nameof(SearchPagedRecords))]
-        [Route("SearchPagedRecords")]
+        [HttpGet(nameof(SearchPagedRecords))]
+        //[Route("SearchPagedRecords")]
         public async Task<List<CustomerDef>> SearchPagedRecords(CustomerDefSO dtoSO)
         {
             var dbDto = _dal.SearchPagedRecords(dtoSO);
             return await dbDto.ToListAsync();
         }
 
-        [HttpPost(nameof(RecordCount))]
-        [Route("RecordCount")]
+        [HttpGet(nameof(RecordCount))]
+        //[Route("RecordCount")]
         public async Task<int> RecordCount(CustomerDefSO dtoSO)
         {
             var count=  await _dal.GetTotalCount(dtoSO);
             return count;
         }
 
-        [HttpPost(nameof(GetRecord))]
-        [Route("GetRecord")]
+        [HttpGet(nameof(GetRecord))]
+        //[Route("GetRecord")]
         public async Task<CustomerDef> GetRecord(string customerID)
         {
             var customerDef = await _dal.GetRecord(customerID);
@@ -58,7 +62,7 @@ namespace CustomerAPI.Controllers
         }
 
         [HttpPost(nameof(SaveRecord))]
-        [Route("SaveRecord")]
+        //[Route("SaveRecord")]
         public async Task<CustomerDef> SaveRecord(CustomerDef customerDef,bool isNewRecord)
         {
             if (isNewRecord)
@@ -77,8 +81,8 @@ namespace CustomerAPI.Controllers
             return customerDef;            
         }
         
-        [HttpPost(nameof(RemoveRecord))]
-        [Route("RemoveRecord")]
+        [HttpGet(nameof(RemoveRecord))]
+        //[Route("RemoveRecord")]
         public async Task RemoveRecord(string customerID)
         {
             CustomerDef _dtoPrev;
@@ -96,7 +100,7 @@ namespace CustomerAPI.Controllers
         }
         
         [HttpPost(nameof(GetKeyValues))]
-        [Route("GetKeyValues")]
+        //[Route("GetKeyValues")]
         public Dictionary<string, string> GetKeyValues(string keyCol, string valueCol, CustomerDefSO dtoSO)
         {
             var dctdata = _dal.GetKeyValues(keyCol, valueCol, dtoSO);

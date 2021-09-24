@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CustomerAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
 
 namespace CustomerAPI
 {
-    public class CustomerDbContext : DbContext
+    public partial class CustomerDbContext : DbContext
     {
         public CustomerDbContext()
         {
