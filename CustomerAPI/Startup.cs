@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using CustomerAPI.Controllers;
+using CustomerAPI.DAL;
 using System.Reflection;
 
 

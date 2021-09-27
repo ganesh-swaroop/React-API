@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 
-namespace CustomerAPI
+namespace CustomerAPI.DAL
 {
     public partial class CustomerDbContext : DbContext
     {
@@ -24,12 +24,14 @@ namespace CustomerAPI
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source=PRATIPA;Initial Catalog=CustomerDef;Integrated Security=True");
-            }
+            // if (!optionsBuilder.IsConfigured)
+            // {
+            //     optionsBuilder.UseSqlServer("Data Source=PRATIPA;Initial Catalog=CustomerDef;Integrated Security=True");
+            // }
         }
-        public DbSet<CustomerDef> CustomerDef {get;set;}
+        
+        
+
 
     }
 }

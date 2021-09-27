@@ -1,0 +1,3 @@
+Time elapsed for inserting 1LK records is (Test1) , 00:01:46.4565027
+Time elapsed for inserting 1LK records is (Test2) , 00:01:38.7596566
+Time elapsed for inserting 1000 records is , 00:00:06.6614242

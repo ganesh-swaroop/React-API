@@ -11,17 +11,18 @@ using System.Linq.Dynamic.Core;
 
 namespace CustomerAPI.DAL
 {
-    // public partial class CustomerDbContext : DbContext
-    // {
-    //     public virtual DbSet<CustomerDef> CustomerDef {get;set;}
+    public partial class CustomerDbContext : DbContext
+    {
+        public DbSet<CustomerDef> customerDef {get;set;}
 
-    // }
+    }
     public class CustomerDefDal 
     {
+
         private readonly CustomerDbContext _db;
-        public CustomerDefDal(){
-            _db = new CustomerDbContext();
-        }
+        // public CustomerDefDal(){
+        //     _db = new CustomerDbContext();
+        // }
         public CustomerDefDal(CustomerDbContext db){
             _db = db;
         }
@@ -34,7 +35,7 @@ namespace CustomerAPI.DAL
             {
                 throw new Exception("CustomerID cannot be null");
             }
-            await _db.CustomerDef.AddAsync(customerDef);
+            await _db.customerDef.AddAsync(customerDef);
             try
             {
                 await _db.SaveChangesAsync();
@@ -57,7 +58,7 @@ namespace CustomerAPI.DAL
             if (customerDef == null) {
                 throw new InvalidOperationException("CustomerDef parameter cannot be null");
             }
-            _db.CustomerDef.Update(customerDef);
+            _db.customerDef.Update(customerDef);
             try
             {
                await _db.SaveChangesAsync();
@@ -82,14 +83,14 @@ namespace CustomerAPI.DAL
             {
                 throw new Exception("CustomerID can not be null");
             }
-            var customerDef =  await _db.CustomerDef.FindAsync(id);
+            var customerDef =  await _db.customerDef.FindAsync(id);
             Console.WriteLine(customerDef);
             if (customerDef == null)
             {
                 throw new Exception("CustomerID is not valid");
             }
 
-            _db.CustomerDef.Remove(customerDef);
+            _db.customerDef.Remove(customerDef);
             await _db.SaveChangesAsync();
             try
             {
@@ -101,13 +102,66 @@ namespace CustomerAPI.DAL
             }
         }
 
+        public async Task InsertRecords(List<CustomerDef> record)
+        {
+            if (record == null) { 
+                throw new InvalidOperationException("List<CustomerDef> parameter cannot be null");
+            }
+            await _db.customerDef.AddRangeAsync(record);
+            // foreach (CustomerDef customer in record)
+            // {
+            //     if (customer.CustomerID == null)
+            //     {
+            //         throw new Exception("CustomerID cannot be null");
+            //     }
+            //     await _db.customerDef.AddAsync(customer);
+            //     if (CustomerDefExists(customer.CustomerID))
+            //     {
+            //         throw new Exception("CustomerID already exists");
+            //     }
+            // }
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new Exception("Client was not Added");
+            }
+        }
+
+        public async Task DeleteRecords(List<CustomerDef> record)
+        {
+            if (record == null)
+            {
+                throw new InvalidOperationException("List<ClientDef> parameter cannot be null");
+            }
+            _db.customerDef.RemoveRange(record);
+            // foreach (CustomerDef customer in record)
+            // {
+            //     if (!CustomerDefExists(customer.CustomerID))
+            //     {
+            //         throw new Exception("ClientID does not exists");
+            //     }
+            //     _db.customerDef.Remove(customer);
+            // }
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new Exception("Client was not Removed");
+            }
+        }
+
         public IQueryable<CustomerDef> SearchRecord(CustomerDefSO dtoSO)
         {
             if (dtoSO == null)
             {
                 throw new Exception("CustomerDefSO can not be null");
             }
-            var dbDto = from c in _db.CustomerDef select c;
+            var dbDto = from c in _db.customerDef select c;
             dbDto = AddFilter(dbDto, dtoSO);
 
             return  dbDto;
@@ -127,8 +181,8 @@ namespace CustomerAPI.DAL
             {
                 throw new Exception("Records to be fetched should be greater than 0");
             }
-            List<CustomerDef> listDto = new List<CustomerDef>();
-            var dbDto = from c in _db.CustomerDef select c;
+            //List<CustomerDef> listDto = new List<CustomerDef>();
+            var dbDto = from c in _db.customerDef select c;
             dbDto = AddFilter(dbDto, dtoSO);
             dbDto = AddOrderBy(dbDto, dtoSO);
             dbDto = dbDto.Skip(dtoSO.StartIndex).Take(dtoSO.RecordsPerPage);
@@ -141,7 +195,7 @@ namespace CustomerAPI.DAL
             {
                 throw new Exception("CustomerDefSO can not be null");
             }
-            var dbDto = from c in _db.CustomerDef select c;
+            var dbDto = from c in _db.customerDef select c;
             dbDto = AddFilter(dbDto, dtoSO);
             return  await dbDto.CountAsync();
         }
@@ -152,7 +206,7 @@ namespace CustomerAPI.DAL
             {
                 throw new Exception("ID can not be null");
             }
-            return _db.CustomerDef.Any(e => e.CustomerID == id);
+            return _db.customerDef.Any(e => e.CustomerID == id);
         }
 
         private IQueryable<CustomerDef> AddFilter(IQueryable<CustomerDef> dbDto, CustomerDefSO dtoSO)
@@ -256,7 +310,7 @@ namespace CustomerAPI.DAL
         {
             if (dtoSO.Orderby == null)
             {
-                dtoSO.Orderby = "";
+                dtoSO.Orderby = "CustomerID";
             }
             string sort=Convert.ToString(dtoSO.Orderby);
             dbDto = dbDto.OrderBy(sort);
@@ -277,7 +331,7 @@ namespace CustomerAPI.DAL
             {
                 throw new Exception("CustomerID can not be null or empty");
             }
-            var CustomerDef = await _db.CustomerDef.FindAsync(id);
+            var CustomerDef = await _db.customerDef.FindAsync(id);
 
             if (CustomerDef == null)
             {
@@ -296,7 +350,7 @@ namespace CustomerAPI.DAL
             }
             if (dtoSO.Orderby == null) dtoSO.Orderby = "";
             Dictionary<string, string> keyValPair = new Dictionary<string, string>();
-            var dbDto = from c in _db.CustomerDef select c;
+            var dbDto = from c in _db.customerDef select c;
             dbDto = AddFilter(dbDto, dtoSO);
             dbDto = AddOrderBy(dbDto, dtoSO, valueCol);
             IQueryable result;

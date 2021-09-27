@@ -7,7 +7,6 @@ using CustomerAPI.Models;
 using CustomerAPI.DAL;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Dynamic;
 
 
 namespace CustomerAPI.Controllers
@@ -18,17 +17,17 @@ namespace CustomerAPI.Controllers
     {
         private readonly CustomerDefDal _dal;
         private readonly CustomerDbContext _context;
-        public CustomerDefController(){
-            _context = new CustomerDbContext();
-            _dal = new CustomerDefDal(_context);
+        // public CustomerDefController(){
+        //     _context = new CustomerAPI.DAL.CustomerDbContext();
+        //     _dal = new CustomerDefDal(_context);
 
-        }
-        // public CustomerDefController(CustomerDbContext context){
-        //     _context = context;
-        //     _dal = new CustomerDefDal(_context);     
         // }
+        public CustomerDefController(CustomerDbContext context){
+            _context = context;
+            _dal = new CustomerDefDal(_context);     
+        }
 
-        [HttpGet(nameof(SearchRecord))]
+        [HttpPost(nameof(SearchRecord))]
         //[Route("SearchRecord")]
         public async Task<List<CustomerDef>> SearchRecord(CustomerDefSO defSO)
         {
@@ -36,7 +35,7 @@ namespace CustomerAPI.Controllers
             return  await dbDto.ToListAsync();
         }
 
-        [HttpGet(nameof(SearchPagedRecords))]
+        [HttpPost(nameof(SearchPagedRecords))]
         //[Route("SearchPagedRecords")]
         public async Task<List<CustomerDef>> SearchPagedRecords(CustomerDefSO dtoSO)
         {
@@ -44,7 +43,7 @@ namespace CustomerAPI.Controllers
             return await dbDto.ToListAsync();
         }
 
-        [HttpGet(nameof(RecordCount))]
+        [HttpPost(nameof(RecordCount))]
         //[Route("RecordCount")]
         public async Task<int> RecordCount(CustomerDefSO dtoSO)
         {
@@ -81,21 +80,21 @@ namespace CustomerAPI.Controllers
             return customerDef;            
         }
         
-        [HttpGet(nameof(RemoveRecord))]
+        [HttpDelete(nameof(RemoveRecord))]
         //[Route("RemoveRecord")]
         public async Task RemoveRecord(string customerID)
         {
-            CustomerDef _dtoPrev;
+            //CustomerDef _dtoPrev;
 
-            _dtoPrev = await _dal.GetRecord(customerID);
-            if (_dtoPrev != null)
-            {
                 await _dal.Delete(customerID);
-            }
-            else
-            {
-                throw new Exception("Can not be removed ");
-            }
+            // _dtoPrev = await _dal.GetRecord(customerID);
+            // if (_dtoPrev != null)
+            // {
+            // }
+            // else
+            // {
+            //     throw new Exception("Can not be removed ");
+            // }
 
         }
         

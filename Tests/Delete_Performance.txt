@@ -1,0 +1,2 @@
+Time elapsed for Deleting 1LK records is (Test1) , 00:05:15.1300503
+Time elapsed for Deleting 1LK records is (Test2) , 00:05:30.1101450

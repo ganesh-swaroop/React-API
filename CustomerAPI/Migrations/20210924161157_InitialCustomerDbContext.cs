@@ -8,7 +8,26 @@ namespace CustomerAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CustomerDef",
+                name: "commonCodes",
+                columns: table => new
+                {
+                    CodeType = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CMCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CDDesc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsSysParam = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_commonCodes", x => new { x.CodeType, x.CMCode });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "customerDef",
                 columns: table => new
                 {
                     CustomerID = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
@@ -45,14 +64,17 @@ namespace CustomerAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomerDef", x => x.CustomerID);
+                    table.PrimaryKey("PK_customerDef", x => x.CustomerID);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CustomerDef");
+                name: "commonCodes");
+
+            migrationBuilder.DropTable(
+                name: "customerDef");
         }
     }
 }
